@@ -53,7 +53,11 @@ class EmployeeTest {
         verify(employeeRepository, times(1)).save(employee);
     }
 
-
+    @Test
+    void updateEmployee() {
+        employeeService.updateEmployee(employee);
+        verify(employeeRepository, times(1)).update(employee);
+    }
 
 
 }
