@@ -1,8 +1,8 @@
-package service.ServiceImplementation;
+package service.impl;
 
 import entity.JobApp;
 import enums.JobAppStatus;
-import service.ServiceInterface.JobAppService;
+import service.inter.JobAppService;
 
 import java.util.List;
 import java.util.UUID;

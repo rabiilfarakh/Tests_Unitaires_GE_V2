@@ -1,4 +1,4 @@
-package service.ServiceInterface;
+package service.inter;
 
 import entity.Leave;
 import enums.StatusLeave;

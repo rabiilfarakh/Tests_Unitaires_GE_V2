@@ -1,13 +1,13 @@
 package repository;
 
-import dao.GenericDaoImpl;
+
 import entity.JobApp;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.UUID;
 
-public class JobAppRepository extends GenericDaoImpl<JobApp, UUID> {
-    public JobAppRepository(Class<JobApp> entityClass, EntityManager entityManager) {
-        super(entityClass, entityManager);
-    }
+public class JobAppRepository{
+
+
 }

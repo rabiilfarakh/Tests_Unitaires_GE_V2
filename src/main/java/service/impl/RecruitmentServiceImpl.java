@@ -1,7 +1,7 @@
-package service.ServiceImplementation;
+package service.impl;
 
 import entity.Recruitment;
-import service.ServiceInterface.RecruitmentService;
+import service.inter.RecruitmentService;
 
 import java.util.List;
 import java.util.UUID;

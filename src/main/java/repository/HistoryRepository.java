@@ -1,13 +1,13 @@
 package repository;
 
-import dao.GenericDaoImpl;
+
 import entity.History;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 
 import java.util.UUID;
 
-public class HistoryRepository extends GenericDaoImpl<History, UUID> {
-    public HistoryRepository(Class<History> entityClass, EntityManager entityManager) {
-        super(entityClass, entityManager);
-    }
+public class HistoryRepository {
+
+
 }
