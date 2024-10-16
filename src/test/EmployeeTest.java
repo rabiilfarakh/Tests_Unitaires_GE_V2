@@ -1,4 +1,3 @@
-package service.impl;
 
 import entity.Employee;
 import enums.Role;
@@ -8,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import repository.EmployeeRepository;
+import service.impl.EmployeeServiceImpl;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+        import static org.mockito.Mockito.*;
 
 class EmployeeTest {
 
@@ -59,5 +59,42 @@ class EmployeeTest {
         verify(employeeRepository, times(1)).update(employee);
     }
 
+    @Test
+    void getAllEmployees() {
+        List<Employee> employees = Arrays.asList(employee);
+        when(employeeRepository.findAll()).thenReturn(employees);
+
+        List<Employee> result = employeeService.getAllEmployees();
+        assertEquals(1, result.size());
+        assertEquals(employee, result.get(0));
+    }
+
+    @Test
+    void getEmployee() {
+        UUID employeeId = employee.getId();
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+
+        Employee result = employeeService.getEmployee(employeeId);
+        assertNotNull(result);
+        assertEquals(employee, result);
+    }
+
+    @Test
+    void getEmployee_NotFound() {
+        UUID employeeId = UUID.randomUUID();
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
+
+        Employee result = employeeService.getEmployee(employeeId);
+        assertNull(result);
+    }
+
+    @Test
+    void deleteEmployee() {
+        UUID employeeId = employee.getId();
+        when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
+
+        employeeService.deleteEmployee(employeeId);
+        verify(employeeRepository, times(1)).delete(employee);
+    }
 
 }
