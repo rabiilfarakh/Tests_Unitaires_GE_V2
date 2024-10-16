@@ -1,4 +1,4 @@
-package service.ServiceInterface;
+package service.inter;
 
 import entity.Employee;
 
@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface EmployeeService {
 
-    void createEmployee(Employee Employee);
+    Employee createEmployee(Employee Employee);
 
     void updateEmployee(Employee Employee);
 

@@ -1,4 +1,4 @@
-package service.ServiceInterface;
+package service.inter;
 
 public interface HistoryService {
 }

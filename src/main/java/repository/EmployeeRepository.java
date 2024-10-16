@@ -2,12 +2,15 @@ package repository;
 
 import dao.GenericDaoImpl;
 import entity.Employee;
-import jakarta.persistence.EntityManager;
+
+import jakarta.enterprise.context.RequestScoped;
 
 import java.util.UUID;
 
+@RequestScoped
 public class EmployeeRepository extends GenericDaoImpl<Employee, UUID> {
-    public EmployeeRepository(Class<Employee> entityClass, EntityManager entityManager) {
-        super(entityClass, entityManager);
+
+    public EmployeeRepository() {
+        super(Employee.class);
     }
 }

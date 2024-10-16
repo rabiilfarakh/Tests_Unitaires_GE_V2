@@ -1,62 +1,84 @@
 package dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.transaction.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 public class GenericDaoImpl<T, ID> implements GenericDao<T, ID> {
 
-    protected EntityManager entityManager;
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
 
-    public GenericDaoImpl(Class<T> entityClass, EntityManager entityManager) {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public GenericDaoImpl(Class<T> entityClass) {
         this.entityClass = entityClass;
-        this.entityManager = entityManager;
+    }
+
+    protected EntityManager getEntityManager() {
+        return entityManager;
     }
 
     @Override
-    @Transactional
     public void save(T entity) {
-        entityManager.persist(entity);
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.persist(entity);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override
-    @Transactional
     public void update(T entity) {
-        entityManager.merge(entity);
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.merge(entity);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override
-    @Transactional
     public void delete(T entity) {
-        entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
+        EntityTransaction transaction = entityManager.getTransaction();
+        try {
+            transaction.begin();
+            entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        }
     }
 
     @Override
     public Optional<T> findById(ID id) {
-        return Optional.ofNullable(entityManager.find(entityClass, id));
+        T entity = entityManager.find(entityClass, id);
+        return Optional.ofNullable(entity);
     }
 
     @Override
     public List<T> findAll() {
-        TypedQuery<T> query = entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass);
+        TypedQuery<T> query = entityManager.createQuery(
+                "SELECT e FROM " + entityClass.getSimpleName() + " e", entityClass
+        );
         return query.getResultList();
-    }
-
-    @Override
-    public Optional<T> findByEmail(String email) {
-        TypedQuery<T> query = entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.email = :email", entityClass);
-        query.setParameter("email", email);
-        return query.getResultStream().findFirst();
-    }
-
-    @Override
-    public List<T> search(String query) {
-        TypedQuery<T> typedQuery = entityManager.createQuery("SELECT e FROM " + entityClass.getSimpleName() + " e WHERE e.name LIKE :query", entityClass);
-        typedQuery.setParameter("query", "%" + query + "%");
-        return typedQuery.getResultList();
     }
 }

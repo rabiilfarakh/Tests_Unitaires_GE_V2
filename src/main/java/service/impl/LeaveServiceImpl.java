@@ -1,8 +1,8 @@
-package service.ServiceImplementation;
+package service.impl;
 
 import entity.Leave;
 import enums.StatusLeave;
-import service.ServiceInterface.LeaveService;
+import service.inter.LeaveService;
 
 import java.util.List;
 import java.util.UUID;

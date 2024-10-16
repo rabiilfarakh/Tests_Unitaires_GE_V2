@@ -42,19 +42,4 @@ public interface GenericDao<T, ID> {
      */
     List<T> findAll();
 
-    /**
-     * Recherche une entité par son adresse e-mail.
-     *
-     * @param email l'adresse e-mail de l'entité
-     * @return un Optional contenant l'entité si trouvée, sinon vide
-     */
-    Optional<T> findByEmail(String email);
-
-    /**
-     * Recherche des entités par un critère de recherche.
-     *
-     * @param query le critère de recherche
-     * @return une liste d'entités correspondant au critère
-     */
-    List<T> search(String query);
 }
