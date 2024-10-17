@@ -35,7 +35,6 @@ class CandidatJobApplyTest {
         candidat.setId(UUID.randomUUID());
         candidat.setName("John Doe");
 
-        // Initialisation de l'objet JobApp
         jobApp = new JobApp();
         jobApp.setId(UUID.randomUUID());
         jobApp.setName("Software Engineer");

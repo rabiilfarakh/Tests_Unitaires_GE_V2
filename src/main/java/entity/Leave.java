@@ -1,41 +1,40 @@
 package entity;
 
-
 import enums.StatusLeave;
 import jakarta.persistence.*;
-import java.util.UUID;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "leave")
+@Table(name = "leaves")
 public class Leave {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID requestId;
 
-    @Column(name = "start_date")
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime startDate;
 
-
-    @Column(name = "duration")
+    @Column(name = "duration", nullable = false)
     private Integer duration;
 
     @Column(name = "certificate")
     private String certificate;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", nullable = false)
     private StatusLeave status;
 
-    @Column(name = "reason")
+    @Column(name = "reason", nullable = false)
     private String reason;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
+    @JoinColumn(name = "employee_id", nullable = false)
     private Employee employee;
 
+    public Leave() {}
 
     public Leave(LocalDateTime startDate, Integer duration, String certificate, StatusLeave status, String reason, Employee employee) {
         this.startDate = startDate;
@@ -46,9 +45,7 @@ public class Leave {
         this.employee = employee;
     }
 
-    public Leave() {
-    }
-
+    // Getters et Setters
     public UUID getRequestId() {
         return requestId;
     }

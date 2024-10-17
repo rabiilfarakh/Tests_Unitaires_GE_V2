@@ -1,23 +1,21 @@
 package service.inter;
 
+import entity.Employee;
 import entity.Leave;
 import enums.StatusLeave;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 public interface LeaveService {
 
-    void createLeave(Leave Leave);
+    String requestLeave(Employee employee, LocalDateTime startDate, Integer duration, String reason);
 
-    void updateLeave(Leave Leave);
+    void acceptLeave(UUID requestId);
 
-    List<Leave> getAllLeaves();
+    void rejectLeave(UUID requestId);
 
-    Leave getLeave(UUID LeaveId);
-
-    void deleteLeave(UUID LeaveId);
-
-    void updateStatus(UUID leaveId, StatusLeave newStatus);
+    Leave getLeaveById(UUID requestId);
 
 }

@@ -1,42 +1,63 @@
-package service.impl;
+package service;
 
+import entity.Employee;
 import entity.Leave;
 import enums.StatusLeave;
-import service.inter.LeaveService;
+import repository.impl.LeaveRepositoryImpl;
 
-import java.util.List;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class LeaveServiceImpl implements LeaveService {
+public class LeaveServiceImpl implements service.inter.LeaveService {
+
+    @Inject
+    private LeaveRepositoryImpl leaveRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
     @Override
-    public void createLeave(Leave Leave) {
+    public String requestLeave(Employee employee, LocalDateTime startDate, Integer duration, String reason) {
+        if (duration > employee.getLeaveBalance()) {
+            return "Not enough leave days available.";
+        }
 
+        Leave leave = new Leave();
+        leave.setStartDate(startDate);
+        leave.setDuration(duration);
+        leave.setStatus(StatusLeave.PENDING);
+        leave.setReason(reason);
+        leave.setEmployee(employee);
+
+        leaveRepository.save(leave);
+
+        employee.setLeaveBalance(employee.getLeaveBalance() - duration);
+        entityManager.merge(employee);
+
+        return "Leave request submitted successfully.";
     }
 
     @Override
-    public void updateLeave(Leave Leave) {
-
+    public void acceptLeave(UUID requestId) {
+        Leave leave = leaveRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Leave not found"));
+        leave.setStatus(StatusLeave.ACCEPTED);
+        leaveRepository.update(leave);
     }
 
     @Override
-    public List<Leave> getAllLeaves() {
-        return List.of();
+    public void rejectLeave(UUID requestId) {
+        Leave leave = leaveRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Leave not found"));
+        leave.setStatus(StatusLeave.REJECTED);
+        leaveRepository.update(leave);
     }
 
     @Override
-    public Leave getLeave(UUID LeaveId) {
-        return null;
-    }
-
-    @Override
-    public void deleteLeave(UUID LeaveId) {
-
-    }
-
-    @Override
-    public void updateStatus(UUID leaveId, StatusLeave newStatus) {
-
+    public Leave getLeaveById(UUID requestId) {
+        return leaveRepository.findById(requestId).orElseThrow(() -> new RuntimeException("Leave not found"));
     }
 }
