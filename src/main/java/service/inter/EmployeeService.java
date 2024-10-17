@@ -7,14 +7,14 @@ import java.util.UUID;
 
 public interface EmployeeService {
 
-    Employee createEmployee(Employee Employee);
+    void create(Employee Employee);
 
-    void updateEmployee(Employee Employee);
+    void update(Employee Employee);
 
-    List<Employee> getAllEmployees();
+    List<Employee> findAll();
 
-    Employee getEmployee(UUID EmployeeId);
+    Employee findById(UUID id);
 
-    void deleteEmployee(UUID EmployeeId);
+    void delete(UUID id);
 
 }

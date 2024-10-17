@@ -1,7 +1,7 @@
 package service.impl;
 
 import entity.Employee;
-import repository.EmployeeRepository;
+import repository.impl.EmployeeRepositoryImpl;
 import service.inter.EmployeeService;
 
 
@@ -15,32 +15,31 @@ import java.util.UUID;
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Inject
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryImpl employeeRepository;
 
     @Override
-    public Employee createEmployee(Employee employee) {
+    public void create(Employee employee) {
         employeeRepository.save(employee);
-        return employee;
     }
 
     @Override
-    public void updateEmployee(Employee employee) {
+    public void update(Employee employee) {
         employeeRepository.update(employee);
     }
 
     @Override
-    public List<Employee> getAllEmployees() {
+    public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
 
     @Override
-    public Employee getEmployee(UUID employeeId) {
-        return employeeRepository.findById(employeeId).orElse(null);
+    public Employee findById(UUID id) {
+        return employeeRepository.findById(id).orElse(null);
     }
 
     @Override
-    public void deleteEmployee(UUID employeeId) {
-        Employee employee = employeeRepository.findById(employeeId).orElse(null);
+    public void delete(UUID id) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
         if (employee != null) {
             employeeRepository.delete(employee);
         }

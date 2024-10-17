@@ -1,6 +1,8 @@
 package dao;
 
 
+import entity.JobApp;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +12,7 @@ public interface GenericDao<T, ID> {
      * Enregistre une entité dans la base de données.
      *
      * @param entity l'entité à enregistrer
+     * @return
      */
     void save(T entity);
 

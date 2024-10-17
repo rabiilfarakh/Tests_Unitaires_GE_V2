@@ -7,13 +7,15 @@ import java.util.UUID;
 
 public interface JobAppService {
 
-    void createJobApp(JobApp application);
+    void create(JobApp jobApp);
 
-    List<JobApp> findAllJobApp();
+    void update(JobApp jobApp);
 
-    JobApp findJobAppById(UUID id);
+    List<JobApp> findAll();
 
-    void updateJobAppStatus(UUID id, JobAppStatus status);
+    JobApp findById(UUID id);
+
+    void delete(UUID id);
 
     List<JobApp> filterJobAppBySkills(String skills);
 }

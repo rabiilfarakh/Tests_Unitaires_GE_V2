@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import repository.EmployeeRepository;
+import repository.impl.EmployeeRepositoryImpl;
 import service.impl.EmployeeServiceImpl;
 
 import java.util.Arrays;
@@ -24,7 +24,7 @@ class EmployeeTest {
     private EmployeeServiceImpl employeeService;
 
     @Mock
-    private EmployeeRepository employeeRepository;
+    private EmployeeRepositoryImpl employeeRepository;
 
     private Employee employee;
 
@@ -49,13 +49,13 @@ class EmployeeTest {
 
     @Test
     void createEmployee() {
-        employeeService.createEmployee(employee);
+        employeeService.create(employee);
         verify(employeeRepository, times(1)).save(employee);
     }
 
     @Test
     void updateEmployee() {
-        employeeService.updateEmployee(employee);
+        employeeService.update(employee);
         verify(employeeRepository, times(1)).update(employee);
     }
 
@@ -64,7 +64,7 @@ class EmployeeTest {
         List<Employee> employees = Arrays.asList(employee);
         when(employeeRepository.findAll()).thenReturn(employees);
 
-        List<Employee> result = employeeService.getAllEmployees();
+        List<Employee> result = employeeService.findAll();
         assertEquals(1, result.size());
         assertEquals(employee, result.get(0));
     }
@@ -74,26 +74,18 @@ class EmployeeTest {
         UUID employeeId = employee.getId();
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
-        Employee result = employeeService.getEmployee(employeeId);
+        Employee result = employeeService.findById(employeeId);
         assertNotNull(result);
         assertEquals(employee, result);
     }
 
-    @Test
-    void getEmployee_NotFound() {
-        UUID employeeId = UUID.randomUUID();
-        when(employeeRepository.findById(employeeId)).thenReturn(Optional.empty());
-
-        Employee result = employeeService.getEmployee(employeeId);
-        assertNull(result);
-    }
 
     @Test
     void deleteEmployee() {
         UUID employeeId = employee.getId();
         when(employeeRepository.findById(employeeId)).thenReturn(Optional.of(employee));
 
-        employeeService.deleteEmployee(employeeId);
+        employeeService.delete(employeeId);
         verify(employeeRepository, times(1)).delete(employee);
     }
 

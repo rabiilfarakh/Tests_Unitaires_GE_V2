@@ -1,5 +1,6 @@
 package dao;
 
+import entity.JobApp;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
