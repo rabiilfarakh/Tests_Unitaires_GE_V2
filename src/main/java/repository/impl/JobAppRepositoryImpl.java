@@ -1,19 +1,20 @@
 package repository.impl;
 
 import dao.GenericDaoImpl;
+import entity.Candidat;
 import entity.JobApp;
 import jakarta.enterprise.context.RequestScoped;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import repository.inter.JobAppRepositoryInf;
+import repository.inter.JobAppRepositoryInter;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
 @RequestScoped
-public class JobAppRepositoryImpl extends GenericDaoImpl<JobApp, UUID> implements JobAppRepositoryInf {
+public class JobAppRepositoryImpl extends GenericDaoImpl<JobApp, UUID> implements JobAppRepositoryInter {
 
     @Inject
     private EntityManager entityManager;
@@ -32,5 +33,10 @@ public class JobAppRepositoryImpl extends GenericDaoImpl<JobApp, UUID> implement
         } catch (Exception e) {
             throw new RuntimeException("Error filtering job applications: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void jobApply(Candidat candidat) {
+
     }
 }

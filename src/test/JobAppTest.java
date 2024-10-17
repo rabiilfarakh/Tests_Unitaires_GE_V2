@@ -1,4 +1,6 @@
 import entity.JobApp;
+import entity.Candidat;
+import entity.CandidatJobApp; // Assuming CandidatJobApp is the entity representing the application link
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -24,6 +26,7 @@ class JobAppTest {
     private JobAppServiceImpl jobAppService;
 
     private JobApp jobApp;
+    private Candidat candidat;
 
     @BeforeEach
     void setUp() {
@@ -31,6 +34,11 @@ class JobAppTest {
         jobApp = new JobApp();
         jobApp.setId(UUID.randomUUID());
         jobApp.setSkills("java");
+
+        candidat = new Candidat();
+        candidat.setId(UUID.randomUUID());
+        candidat.setName("John Doe");
+        // Set other fields as necessary
     }
 
     @Test
@@ -81,4 +89,5 @@ class JobAppTest {
         assertEquals(1, result.size());
         assertEquals("java", result.get(0).getSkills());
     }
+
 }

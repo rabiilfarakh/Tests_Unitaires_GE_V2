@@ -1,30 +1,38 @@
 package entity;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 import enums.JobAppStatus;
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
 @Entity
-@Table(name="applicatins")
+@Table(name = "applications")
 public class JobApp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String email;
     private String skills;
+
     @Enumerated(EnumType.STRING)
-    private JobAppStatus jobAppStatus;
+    private enums.JobAppStatus jobAppStatus;
 
     private LocalDateTime submissionDate;
-    @ManyToOne()
+
+    @ManyToOne
     @JoinColumn(name = "recruitment_id")
     private Recruitment recruitment;
 
-    public JobApp(String name, String email, String skills, JobAppStatus jobAppStatus, LocalDateTime submissionDate, Recruitment recruitment) {
+    @OneToMany(mappedBy = "jobApp", cascade = CascadeType.ALL)
+    private List<CandidatJobApp> jobCandidates;
+
+    public JobApp() {}
+
+    public JobApp(String name, String email, String skills, enums.JobAppStatus jobAppStatus,
+                  LocalDateTime submissionDate, Recruitment recruitment) {
         this.name = name;
         this.email = email;
         this.skills = skills;
@@ -33,7 +41,6 @@ public class JobApp {
         this.recruitment = recruitment;
     }
 
-    public JobApp() {}
 
     public UUID getId() {
         return id;
@@ -89,5 +96,13 @@ public class JobApp {
 
     public void setRecruitment(Recruitment recruitment) {
         this.recruitment = recruitment;
+    }
+
+    public List<CandidatJobApp> getJobCandidates() {
+        return jobCandidates;
+    }
+
+    public void setJobCandidates(List<CandidatJobApp> jobCandidates) {
+        this.jobCandidates = jobCandidates;
     }
 }
