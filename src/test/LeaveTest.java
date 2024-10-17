@@ -80,4 +80,70 @@ class LeaveTest {
         verify(leaveRepository, times(1)).update(leave);
     }
 
+    @Test
+    void testAcceptLeave_LeaveNotFound() {
+        UUID requestId = UUID.randomUUID();
+        when(leaveRepository.findById(requestId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            leaveService.acceptLeave(requestId);
+        });
+
+        assertEquals("Leave not found", exception.getMessage());
+        verify(leaveRepository, never()).update(any(Leave.class));
+    }
+
+    @Test
+    void testRejectLeave_Success() {
+        UUID requestId = UUID.randomUUID();
+        Leave leave = new Leave();
+        leave.setRequestId(requestId);
+        leave.setStatus(StatusLeave.PENDING);
+
+        when(leaveRepository.findById(requestId)).thenReturn(Optional.of(leave));
+
+        leaveService.rejectLeave(requestId);
+
+        assertEquals(StatusLeave.REJECTED, leave.getStatus());
+        verify(leaveRepository, times(1)).update(leave);
+    }
+
+    @Test
+    void testRejectLeave_LeaveNotFound() {
+        UUID requestId = UUID.randomUUID();
+        when(leaveRepository.findById(requestId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            leaveService.rejectLeave(requestId);
+        });
+
+        assertEquals("Leave not found", exception.getMessage());
+        verify(leaveRepository, never()).update(any(Leave.class));
+    }
+
+    @Test
+    void testGetLeaveById_Success() {
+        UUID requestId = UUID.randomUUID();
+        Leave leave = new Leave();
+        leave.setRequestId(requestId);
+
+        when(leaveRepository.findById(requestId)).thenReturn(Optional.of(leave));
+
+        Leave result = leaveService.getLeaveById(requestId);
+
+        assertEquals(leave, result);
+    }
+
+    @Test
+    void testGetLeaveById_LeaveNotFound() {
+        UUID requestId = UUID.randomUUID();
+        when(leaveRepository.findById(requestId)).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            leaveService.getLeaveById(requestId);
+        });
+
+        assertEquals("Leave not found", exception.getMessage());
+    }
+
 }
